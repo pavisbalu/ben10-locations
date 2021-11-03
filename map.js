@@ -58,32 +58,36 @@ $(document).ready(function() {
             }
         });
 
-        let groupedMembersByCity = _.groupBy(members, 'city');
-        let cities = _.allKeys(groupedMembersByCity).map(function(city) {
-            let membersInCurrentCity = groupedMembersByCity[city];
-            let first = _.head(membersInCurrentCity);
-            return {
-                city: first.city,
-                latitude: first.latitude,
-                longitude: first.longitude,
-            }
-        });
-        let cityToLatLongs = cities.reduce((obj, item) => (obj[item.city] = item, obj), {});
-
-        _.allKeys(groupedMembersByCity).map(function(city) {
-            let membersInCurrentCity = groupedMembersByCity[city];
-            let name = membersInCurrentCity.map(function(member) {
-                return member.name
-            }).join("<br>");
-
-            let cityPosition = cityToLatLongs[city];
-
-            let popupContent = `<div><h4>${name}</h4></div>`;
-            let pos = [cityPosition.latitude, cityPosition.longitude];
-            let marker = L.marker(pos);
-            let p = new L.Popup({ autoClose: false, closeOnClick: false })
-                .setContent(popupContent);
-            marker.bindPopup(p).addTo(map).openPopup();
-        });
+        addMarkersByGroupingMembersByCity(members, map);
     });
 });
+
+function addMarkersByGroupingMembersByCity(members, map) {
+    let groupedMembersByCity = _.groupBy(members, 'city');
+    let cities = _.allKeys(groupedMembersByCity).map(function(city) {
+        let membersInCurrentCity = groupedMembersByCity[city];
+        let first = _.head(membersInCurrentCity);
+        return {
+            city: first.city,
+            latitude: first.latitude,
+            longitude: first.longitude,
+        }
+    });
+    let cityToLatLongs = cities.reduce((obj, item) => (obj[item.city] = item, obj), {});
+
+    _.allKeys(groupedMembersByCity).map(function(city) {
+        let membersInCurrentCity = groupedMembersByCity[city];
+        let name = membersInCurrentCity.map(function(member) {
+            return member.name
+        }).join("<br>");
+
+        let cityPosition = cityToLatLongs[city];
+
+        let popupContent = `<div><h4>${name}</h4></div>`;
+        let pos = [cityPosition.latitude, cityPosition.longitude];
+        let marker = L.marker(pos);
+        let p = new L.Popup({ autoClose: false, closeOnClick: false })
+            .setContent(popupContent);
+        marker.bindPopup(p).addTo(map).openPopup();
+    });
+}
