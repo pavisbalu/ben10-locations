@@ -23,6 +23,7 @@ $(document).ready(function() {
     let currentTheme = localStorage.getItem('theme');
     if (!currentTheme) {
         dark();
+        currentTheme = localStorage.getItem('theme');
     }
 
     let map = L.map('map', { attributionControl: false });
