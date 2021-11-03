@@ -6,5 +6,7 @@ You can always add more members at this spreadsheet -- https://docs.google.com/s
 
 You can use [maps.google.com](https://maps.google.com/) / [geocode.xyz](https://geocode.xyz/) for fetching the Latitude / Longitude for the given cities.
 
+You can view this app live at https://pavisbalu.github.io/ben10-locations/
+
 ## License
 https://www.apache.org/licenses/LICENSE-2.0
