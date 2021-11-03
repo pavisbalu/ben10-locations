@@ -16,6 +16,17 @@ function toggleTheme() {
     window.location.reload();
 }
 
+
+function toggleView() {
+    let currentView = localStorage.getItem('view');
+    if (!currentView || currentView.startsWith('grouped')) {
+        localStorage.setItem('view', 'clustered');
+    } else {
+        localStorage.setItem('view', 'grouped');
+    }
+    window.location.reload();
+}
+
 $(document).ready(function() {
     // set the dark as default
     let currentTheme = localStorage.getItem('theme');
@@ -24,8 +35,11 @@ $(document).ready(function() {
         currentTheme = localStorage.getItem('theme');
     }
 
+    // it can be clustered / grouped
+    let currentView = localStorage.getItem('view') || 'grouped';
+
     let map = L.map('map', { attributionControl: false });
-    map.setView([22.5, 73], 6);
+    map.setView([22.5, 73], currentView === 'grouped' ? 6 : 5);
 
     let credits = L.control.attribution().addTo(map);
     credits.addAttribution('Made with <i class="fas fa-heart"></i> by Pavithra B');
@@ -36,12 +50,18 @@ $(document).ready(function() {
     );
     dark_bm.addTo(map);
 
-    // add toggle button on the map
+    // add theme toggle button on the map
     let buttonClass = currentTheme && currentTheme.startsWith('dark') ? 'fa-toggle-off' : 'fa-toggle-on'
     let toggleButtonTitle = currentTheme && currentTheme.startsWith('dark') ? 'Switch to Light' : 'Switch to Dark'
     L.easyButton(buttonClass, function() {
         toggleTheme();
     }, toggleButtonTitle).addTo(map);
+
+
+    // add view toggle button on the map
+    L.easyButton('fa-users-cog', function() {
+        toggleView();
+    }, 'Change View').addTo(map);
 
 
     // NB: Might want to delete this URL with the API Key after the demo / it has served it's purpose
@@ -58,9 +78,32 @@ $(document).ready(function() {
             }
         });
 
-        addMarkersByGroupingMembersByCity(members, map);
+        if (currentView === 'grouped') {
+            addMarkersByGroupingMembersByCity(members, map);
+        } else {
+            addMarkersByCluster(members, map);
+        }
     });
 });
+
+function addMarkersByCluster(members, map) {
+    let markers = L.markerClusterGroup();
+    let pops = [];
+
+    members.map(function(member) {
+        let popupContent = `<div><h4>${member.name}</h4></div>`;
+        let marker = L.marker([member.latitude, member.longitude]);
+        let p = new L.Popup({ autoClose: false, closeOnClick: false }).setContent(popupContent);
+        pops.push(marker.bindPopup(p));
+        markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+
+    pops.forEach(function(p) {
+        p.openPopup();
+    });
+}
 
 function addMarkersByGroupingMembersByCity(members, map) {
     let groupedMembersByCity = _.groupBy(members, 'city');
