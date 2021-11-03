@@ -1,11 +1,9 @@
 function dark() {
     localStorage.setItem('theme', 'dark-v10');
-    localStorage.setItem('themeName', 'Dark');
 }
 
 function light() {
     localStorage.setItem('theme', 'light-v10');
-    localStorage.setItem('themeName', 'Light');
 }
 
 function toggleTheme() {
