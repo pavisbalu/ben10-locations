@@ -1,17 +1,21 @@
 function dark() {
-    localStorage.setItem('theme', 'dark-v10');
+    const name = 'dark-v10';
+    localStorage.setItem('theme', name);
+    return name;
 }
 
 function light() {
-    localStorage.setItem('theme', 'light-v10');
+    const name = 'light-v10';
+    localStorage.setItem('theme', name);
+    return name;
 }
 
 function toggleTheme() {
-    let currentTheme = localStorage.getItem('theme');
-    if (!currentTheme || currentTheme.startsWith('light')) {
-        dark();
-    } else {
+    let currentTheme = localStorage.getItem('theme') || dark();
+    if (currentTheme.startsWith('dark')) {
         light();
+    } else {
+        dark();
     }
     window.location.reload();
 }
@@ -29,11 +33,7 @@ function toggleView() {
 
 $(document).ready(function() {
     // set the dark as default
-    let currentTheme = localStorage.getItem('theme');
-    if (!currentTheme) {
-        dark();
-        currentTheme = localStorage.getItem('theme');
-    }
+    let currentTheme = localStorage.getItem('theme') || dark();
 
     // it can be clustered / grouped
     let currentView = localStorage.getItem('view') || 'grouped';
