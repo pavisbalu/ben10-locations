@@ -18,17 +18,20 @@ function toggleView() {
 }
 
 function fitMap(map) {
-    let bounds = [];
-    map.eachLayer(function(layer) {
-        if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
-            bounds.push(layer._latlng);
-        } else if (layer instanceof L.MarkerCluster) {
-            layer.getAllChildMarkers().forEach(function(child) {
-                bounds.push(child._latlng);
-            });
-        }
-    });
-    map.fitBounds(L.latLngBounds(bounds).pad(0.2));
+    let indiaLayer = L.geoJSON(INDIA_BOUNDARY.geojson);
+    map.fitBounds(indiaLayer.getBounds());
+
+    // let bounds = [];
+    // map.eachLayer(function(layer) {
+    //     if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
+    //         bounds.push(layer._latlng);
+    //     } else if (layer instanceof L.MarkerCluster) {
+    //         layer.getAllChildMarkers().forEach(function(child) {
+    //             bounds.push(child._latlng);
+    //         });
+    //     }
+    // });
+    // map.fitBounds(L.latLngBounds(bounds).pad(0.2));
 }
 
 $(document).ready(function() {
@@ -42,8 +45,8 @@ $(document).ready(function() {
     credits.addAttribution('Made with <i class="fas fa-heart"></i> by Pavithra B');
 
     let mapboxApiKey = "pk.eyJ1IjoiYXNod2FudGhrdW1hciIsImEiOiJja3ZqaWRiMnIwcjNxMnZtdGMzdDV6NXd6In0.mnROzgnUQY5wheUA7i0HHA";
-    let mapTileLayer = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/' + currentTheme + '/tiles/256/{z}/{x}/{y}?' +
-        'access_token=' + mapboxApiKey, { maxNativeZoom: 18, maxZoom: 19 }
+    let mapTileLayer = new L.TileLayer.BoundaryCanvas('https://api.mapbox.com/styles/v1/mapbox/' + currentTheme + '/tiles/256/{z}/{x}/{y}?' +
+        'access_token=' + mapboxApiKey, { maxNativeZoom: 18, maxZoom: 19, boundary: INDIA_BOUNDARY.geojson }
     );
     mapTileLayer.addTo(map);
 
