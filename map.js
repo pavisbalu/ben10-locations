@@ -1,17 +1,19 @@
+const VIEW = 'view';
 const VIEW_GROUPED = 'grouped';
 const VIEW_CLUSTERED = 'clustered';
+const THEME = 'theme';
 const THEME_DARK = 'dark-v10';
 const THEME_LIGHT = 'light-v10';
 
 function toggleTheme() {
-    let currentTheme = localStorage.getItem('theme') || THEME_DARK;
-    localStorage.setItem('theme', currentTheme === THEME_DARK ? THEME_LIGHT : THEME_DARK);
+    let currentTheme = localStorage.getItem(THEME) || THEME_DARK;
+    localStorage.setItem(THEME, currentTheme === THEME_DARK ? THEME_LIGHT : THEME_DARK);
     window.location.reload();
 }
 
 function toggleView() {
-    let currentView = localStorage.getItem('view') || VIEW_GROUPED;
-    localStorage.setItem('view', currentView === VIEW_GROUPED ? VIEW_CLUSTERED : VIEW_GROUPED);
+    let currentView = localStorage.getItem(VIEW) || VIEW_GROUPED;
+    localStorage.setItem(VIEW, currentView === VIEW_GROUPED ? VIEW_CLUSTERED : VIEW_GROUPED);
     window.location.reload();
 }
 
@@ -30,8 +32,8 @@ function fitMap(map) {
 }
 
 $(document).ready(function() {
-    let currentTheme = localStorage.getItem('theme') || THEME_DARK;
-    let currentView = localStorage.getItem('view') || VIEW_GROUPED;
+    let currentTheme = localStorage.getItem(THEME) || THEME_DARK;
+    let currentView = localStorage.getItem(VIEW) || VIEW_GROUPED;
 
     let map = L.map('map', { attributionControl: false, zoomSnap: 0 });
     map.setView([22.5, 80], 5);
