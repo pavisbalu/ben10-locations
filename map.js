@@ -38,8 +38,10 @@ $(document).ready(function() {
     // it can be clustered / grouped
     let currentView = localStorage.getItem('view') || 'grouped';
 
+    let defaultPosition = [22.5, 73];
+    let defaultZ = currentView === 'grouped' ? 6 : 5;
     let map = L.map('map', { attributionControl: false });
-    map.setView([22.5, 73], currentView === 'grouped' ? 6 : 5);
+    map.setView(defaultPosition, defaultZ);
 
     let credits = L.control.attribution().addTo(map);
     credits.addAttribution('Made with <i class="fas fa-heart"></i> by Pavithra B');
@@ -68,6 +70,10 @@ $(document).ready(function() {
         window.open('https://docs.google.com/spreadsheets/d/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/edit#gid=0', '_new');
     }, 'Add Members').addTo(map);
 
+    // Reset Map view
+    L.easyButton('fa-crosshairs', function(btn, map) {
+        map.setView(defaultPosition, defaultZ);
+    }).addTo(map);
 
     // NB: Might want to delete this URL with the API Key after the demo / it has served it's purpose
     let spreadsheetURL = "https://sheets.googleapis.com/v4/spreadsheets/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/values/Names!A2:Z1000?key=AIzaSyDkKyiAAQ8KCGVhHtNoAvTgliOk4kw6moc";
