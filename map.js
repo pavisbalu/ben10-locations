@@ -9,7 +9,6 @@ function toggleTheme() {
     window.location.reload();
 }
 
-
 function toggleView() {
     let currentView = localStorage.getItem('view') || VIEW_GROUPED;
     localStorage.setItem('view', currentView === VIEW_GROUPED ? VIEW_CLUSTERED : VIEW_GROUPED);
