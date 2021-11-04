@@ -54,13 +54,10 @@ $(document).ready(function() {
     );
     dark_bm.addTo(map);
 
-    // add theme toggle button on the map
-    let buttonClass = currentTheme && currentTheme.startsWith('dark') ? 'fa-toggle-off' : 'fa-toggle-on'
-    let toggleButtonTitle = currentTheme && currentTheme.startsWith('dark') ? 'Switch to Light' : 'Switch to Dark'
-    L.easyButton(buttonClass, function() {
-        toggleTheme();
-    }, toggleButtonTitle).addTo(map);
-
+    // Reset Map view
+    L.easyButton('fa-crosshairs', function(btn, map) {
+        map.setView(defaultPosition, defaultZ);
+    }).addTo(map);
 
     // add view toggle button on the map
     L.easyButton('fa-users-cog', function() {
@@ -72,15 +69,15 @@ $(document).ready(function() {
         window.open('https://docs.google.com/spreadsheets/d/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/edit#gid=0', '_new');
     }, 'Add Members').addTo(map);
 
+    // add theme toggle button on the map
+    L.easyButton('fas fa-adjust', function() {
+        toggleTheme();
+    }, 'Toggle Theme').addTo(map);
+
     // add view toggle button on the map
     L.easyButton('fab fa-github', function() {
         window.open('https://github.com/pavisbalu/ben10-locations', '_new');
     }, 'View Source on Github').addTo(map);
-
-    // Reset Map view
-    L.easyButton('fa-crosshairs', function(btn, map) {
-        map.setView(defaultPosition, defaultZ);
-    }).addTo(map);
 
     // NB: Might want to delete this URL with the API Key after the demo / it has served it's purpose
     let spreadsheetURL = "https://sheets.googleapis.com/v4/spreadsheets/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/values/Names!A2:Z1000?key=AIzaSyDkKyiAAQ8KCGVhHtNoAvTgliOk4kw6moc";
