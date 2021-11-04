@@ -111,8 +111,12 @@ function addMarkersByCluster(members, map) {
 
     map.addLayer(markers);
 
-    pops.forEach(function(p) {
-        p.openPopup();
+    // Ref - https://stackoverflow.com/a/48559308
+    map.on('layeradd', function(event) {
+        let layer = event.layer;
+        if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
+            layer.openPopup();
+        }
     });
 }
 
