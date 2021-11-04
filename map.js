@@ -63,6 +63,11 @@ $(document).ready(function() {
         toggleView();
     }, 'Change View').addTo(map);
 
+    // add view toggle button on the map
+    L.easyButton('fa-user-plus', function() {
+        window.open('https://docs.google.com/spreadsheets/d/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/edit#gid=0', '_new');
+    }, 'Add Members').addTo(map);
+
 
     // NB: Might want to delete this URL with the API Key after the demo / it has served it's purpose
     let spreadsheetURL = "https://sheets.googleapis.com/v4/spreadsheets/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/values/Names!A2:Z1000?key=AIzaSyDkKyiAAQ8KCGVhHtNoAvTgliOk4kw6moc";
