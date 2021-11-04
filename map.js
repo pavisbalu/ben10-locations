@@ -70,6 +70,11 @@ $(document).ready(function() {
         window.open('https://docs.google.com/spreadsheets/d/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/edit#gid=0', '_new');
     }, 'Add Members').addTo(map);
 
+    // add view toggle button on the map
+    L.easyButton('fab fa-github', function() {
+        window.open('https://github.com/pavisbalu/ben10-locations', '_new');
+    }, 'View Source on Github').addTo(map);
+
     // Reset Map view
     L.easyButton('fa-crosshairs', function(btn, map) {
         map.setView(defaultPosition, defaultZ);
