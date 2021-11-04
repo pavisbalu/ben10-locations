@@ -70,10 +70,13 @@ $(document).ready(function() {
         window.open('https://docs.google.com/spreadsheets/d/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/edit#gid=0', '_new');
     }, 'Add Members').addTo(map);
 
-    // add view toggle button on the map
     L.easyButton('fab fa-github', function() {
         window.open('https://github.com/pavisbalu/ben10-locations', '_new');
     }, 'View Source on Github').addTo(map);
+
+    L.easyButton('fas fa-question', function() {
+        tour();
+    }, 'Show Help').addTo(map);
 
     // NB: Might want to delete this URL with the API Key after the demo / it has served it's purpose
     let spreadsheetURL = "https://sheets.googleapis.com/v4/spreadsheets/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/values/Names!A2:Z1000?key=AIzaSyDkKyiAAQ8KCGVhHtNoAvTgliOk4kw6moc";
@@ -97,7 +100,35 @@ $(document).ready(function() {
 
         fitMap(map);
     });
+
+    let introState = localStorage.getItem('intro');
+    if (!introState) {
+        tour();
+    }
 });
+
+function tour() {
+    let tour = introJs().setOptions({
+        steps: [{
+            title: "Welcome",
+            element: document.querySelector("div.leaflet-top.leaflet-left"),
+            intro: "Hello 👋, Apart from the map on the right, you also have various controls available here. <p><em>You can also exit this guided tour by pressing <strong>ESC</strong> key.</em></p>"
+        }, {
+            element: document.querySelector("button[title='Center Map']"),
+            intro: "Center the map to show all the markers in a single view",
+        }, {
+            element: document.querySelector("button[title='Change View']"),
+            intro: "Switch between Grouped vs Clustered View",
+        }, {
+            element: document.querySelector("button[title='Toggle Theme']"),
+            intro: "Switch between Light and Dark Themes",
+        }]
+    });
+    tour.onexit(function() {
+        localStorage.setItem('intro', 'true');
+    });
+    tour.start();
+}
 
 function addMarkersByCluster(members, map) {
     let markers = L.markerClusterGroup();
