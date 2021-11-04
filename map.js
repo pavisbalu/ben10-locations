@@ -35,7 +35,7 @@ function fitMap(map) {
 }
 
 $(document).ready(function() {
-    let currentTheme = localStorage.getItem(THEME) || THEME_DARK;
+    let currentTheme = localStorage.getItem(THEME) || THEME_LIGHT;
     let currentView = localStorage.getItem(VIEW) || VIEW_GROUPED;
 
     let map = L.map('map', { attributionControl: false, zoomSnap: 0 });
