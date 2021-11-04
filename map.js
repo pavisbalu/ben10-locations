@@ -38,9 +38,11 @@ $(document).ready(function() {
     // it can be clustered / grouped
     let currentView = localStorage.getItem('view') || 'grouped';
 
-    let defaultPosition = [22.5, 73];
-    let defaultZ = currentView === 'grouped' ? 6 : 5;
-    let map = L.map('map', { attributionControl: false });
+    let defaultClusteredPosition = [22.5, 80];
+    let defaultGroupedPosition = [22.5, 80];
+    let defaultPosition = currentView === 'grouped' ? defaultGroupedPosition : defaultClusteredPosition;
+    let defaultZ = currentView === 'grouped' ? 5.7 : 5;
+    let map = L.map('map', { attributionControl: false, zoomSnap: 0 });
     map.setView(defaultPosition, defaultZ);
 
     let credits = L.control.attribution().addTo(map);
