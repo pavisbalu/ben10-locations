@@ -1,78 +1,70 @@
-function dark() {
-    const name = 'dark-v10';
-    localStorage.setItem('theme', name);
-    return name;
-}
-
-function light() {
-    const name = 'light-v10';
-    localStorage.setItem('theme', name);
-    return name;
-}
+const VIEW_GROUPED = 'grouped';
+const VIEW_CLUSTERED = 'clustered';
+const THEME_DARK = 'dark-v10';
+const THEME_LIGHT = 'light-v10';
 
 function toggleTheme() {
-    let currentTheme = localStorage.getItem('theme') || dark();
-    if (currentTheme.startsWith('dark')) {
-        light();
-    } else {
-        dark();
-    }
+    let currentTheme = localStorage.getItem('theme') || THEME_DARK;
+    localStorage.setItem('theme', currentTheme === THEME_DARK ? THEME_LIGHT : THEME_DARK);
     window.location.reload();
 }
 
 
 function toggleView() {
-    let currentView = localStorage.getItem('view');
-    if (!currentView || currentView.startsWith('grouped')) {
-        localStorage.setItem('view', 'clustered');
-    } else {
-        localStorage.setItem('view', 'grouped');
-    }
+    let currentView = localStorage.getItem('view') || VIEW_GROUPED;
+    localStorage.setItem('view', currentView === VIEW_GROUPED ? VIEW_CLUSTERED : VIEW_GROUPED);
     window.location.reload();
 }
 
+function fitMap(map) {
+    let bounds = [];
+    map.eachLayer(function(layer) {
+        if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
+            bounds.push(layer._latlng);
+        } else if (layer instanceof L.MarkerCluster) {
+            layer.getAllChildMarkers().forEach(function(child) {
+                bounds.push(child._latlng);
+            });
+        }
+    });
+    map.fitBounds(L.latLngBounds(bounds).pad(0.2));
+}
+
 $(document).ready(function() {
-    // set the dark as default
-    let currentTheme = localStorage.getItem('theme') || dark();
+    let currentTheme = localStorage.getItem('theme') || THEME_DARK;
+    let currentView = localStorage.getItem('view') || VIEW_GROUPED;
 
-    // it can be clustered / grouped
-    let currentView = localStorage.getItem('view') || 'grouped';
-
-    let defaultClusteredPosition = [22.5, 80];
-    let defaultGroupedPosition = [22.5, 80];
-    let defaultPosition = currentView === 'grouped' ? defaultGroupedPosition : defaultClusteredPosition;
-    let defaultZ = currentView === 'grouped' ? 5.7 : 5;
     let map = L.map('map', { attributionControl: false, zoomSnap: 0 });
-    map.setView(defaultPosition, defaultZ);
+    map.setView([22.5, 80], 5);
 
     let credits = L.control.attribution().addTo(map);
     credits.addAttribution('Made with <i class="fas fa-heart"></i> by Pavithra B');
 
-    let mapbox_api_key = "pk.eyJ1IjoiYXNod2FudGhrdW1hciIsImEiOiJja3ZqaWRiMnIwcjNxMnZtdGMzdDV6NXd6In0.mnROzgnUQY5wheUA7i0HHA";
-    let dark_bm = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/' + currentTheme + '/tiles/256/{z}/{x}/{y}?' +
-        'access_token=' + mapbox_api_key, { maxNativeZoom: 18, maxZoom: 19 }
+    let mapboxApiKey = "pk.eyJ1IjoiYXNod2FudGhrdW1hciIsImEiOiJja3ZqaWRiMnIwcjNxMnZtdGMzdDV6NXd6In0.mnROzgnUQY5wheUA7i0HHA";
+    let mapTileLayer = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/' + currentTheme + '/tiles/256/{z}/{x}/{y}?' +
+        'access_token=' + mapboxApiKey, { maxNativeZoom: 18, maxZoom: 19 }
     );
-    dark_bm.addTo(map);
+    mapTileLayer.addTo(map);
 
     // Reset Map view
     L.easyButton('fa-crosshairs', function(btn, map) {
-        map.setView(defaultPosition, defaultZ);
-    }).addTo(map);
+        fitMap(map);
+    }, 'Center Map').addTo(map);
 
     // add view toggle button on the map
     L.easyButton('fa-users-cog', function() {
         toggleView();
     }, 'Change View').addTo(map);
 
-    // add view toggle button on the map
-    L.easyButton('fa-user-plus', function() {
-        window.open('https://docs.google.com/spreadsheets/d/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/edit#gid=0', '_new');
-    }, 'Add Members').addTo(map);
-
     // add theme toggle button on the map
     L.easyButton('fas fa-adjust', function() {
         toggleTheme();
     }, 'Toggle Theme').addTo(map);
+
+    // add view toggle button on the map
+    L.easyButton('fa-user-plus', function() {
+        window.open('https://docs.google.com/spreadsheets/d/1inOlpl1oS7AYQpcGSMVH7WmQMMDmyRCrkVmWihc4KpU/edit#gid=0', '_new');
+    }, 'Add Members').addTo(map);
 
     // add view toggle button on the map
     L.easyButton('fab fa-github', function() {
@@ -93,11 +85,13 @@ $(document).ready(function() {
             }
         });
 
-        if (currentView === 'grouped') {
+        if (currentView === VIEW_GROUPED) {
             addMarkersByGroupingMembersByCity(members, map);
         } else {
             addMarkersByCluster(members, map);
         }
+
+        fitMap(map);
     });
 });
 
