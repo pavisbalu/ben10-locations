@@ -118,6 +118,11 @@ function addMarkersByCluster(members, map) {
             layer.openPopup();
         }
     });
+
+    // attempt to pre-open the pop-ups wherever possible
+    pops.forEach(function(p) {
+        p.openPopup();
+    });
 }
 
 function addMarkersByGroupingMembersByCity(members, map) {
