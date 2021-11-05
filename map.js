@@ -131,7 +131,7 @@ function tour() {
 }
 
 function addMarkersByCluster(members, map) {
-    let markers = L.markerClusterGroup();
+    let markers = L.markerClusterGroup({ singleMarkerMode: true });
     let pops = [];
 
     members.map(function(member) {
