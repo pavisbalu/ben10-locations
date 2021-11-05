@@ -114,14 +114,17 @@ function tour() {
             element: document.querySelector("div.leaflet-top.leaflet-left"),
             intro: "Hello 👋, Apart from the map on the right, you also have various controls available here. <p><em>You can also exit this guided tour by pressing <strong>ESC</strong> key.</em></p>"
         }, {
+            title: "Center Map",
             element: document.querySelector("button[title='Center Map']"),
-            intro: "Center the map to show all the markers in a single view",
+            intro: "Center the map to show all the markers in a single view. It's useful when you've zoomed into a location and want to quickly fit all markers on the screen.",
         }, {
+            title: "Toggle Views",
             element: document.querySelector("button[title='Change View']"),
-            intro: "Switch between Grouped vs Clustered View",
+            intro: "Switch between Grouped vs Clustered View. <p>Grouped View shows all members grouped by city, Clustered view clusters individual markers by their distance on the screen.</p><p><em> My personal preferance is Clustered View.</em></p>",
         }, {
+            title: "Toggle Theme",
             element: document.querySelector("button[title='Toggle Theme']"),
-            intro: "Switch between Light and Dark Themes",
+            intro: "Switch between Light and Dark Themes for the Map. Go ahead give it a try!",
         }]
     });
     tour.onexit(function() {
