@@ -46,7 +46,7 @@ $(document).ready(function() {
 
     let mapboxApiKey = "pk.eyJ1IjoiYXNod2FudGhrdW1hciIsImEiOiJja3ZqaWRiMnIwcjNxMnZtdGMzdDV6NXd6In0.mnROzgnUQY5wheUA7i0HHA";
     let mapTileLayer = new L.TileLayer.BoundaryCanvas('https://api.mapbox.com/styles/v1/mapbox/' + currentTheme + '/tiles/256/{z}/{x}/{y}?' +
-        'access_token=' + mapboxApiKey, { maxNativeZoom: 18, maxZoom: 19, boundary: INDIA_BOUNDARY.geojson }
+        'access_token=' + mapboxApiKey, { maxNativeZoom: 18, maxZoom: 19, boundary: INDIA_BOUNDARY }
     );
     mapTileLayer.addTo(map);
 
