@@ -176,9 +176,14 @@ function addMarkersByGroupingMembersByCity(members, map) {
 
     _.allKeys(groupedMembersByCity).map(function(city) {
         let membersInCurrentCity = groupedMembersByCity[city];
-        let name = membersInCurrentCity.map(function(member) {
+
+        let name = _.take(membersInCurrentCity, 2).map(function(member) {
             return member.name
         }).join("<br>");
+
+        if (membersInCurrentCity.length > 2) {
+            name += "<br> and " + (membersInCurrentCity.length - 2) + " more";
+        }
 
         let cityPosition = cityToLatLongs[city];
 
@@ -187,6 +192,9 @@ function addMarkersByGroupingMembersByCity(members, map) {
         let marker = L.marker(pos);
         let p = new L.Popup({ autoClose: false, closeOnClick: false })
             .setContent(popupContent);
-        marker.bindPopup(p).addTo(map).openPopup();
+        let popup = marker.bindPopup(p).addTo(map);
+        if (membersInCurrentCity.length > 10) {
+            popup.openPopup();
+        }
     });
 }
