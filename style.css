@@ -2,6 +2,10 @@ body {
     margin: 0px;
 }
 
+h4 {
+    font-family: 'Open Sans';
+}
+
 #map {
     position: absolute;
     top: 0;
